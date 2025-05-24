@@ -1,13 +1,13 @@
 import React from "react";
 import PlantCard from "./PlantCard";
 
-function PlantList({ ps, onDelete, onUpdatePrice }) {
+function PlantList({ plants, onDelete, onUpdatePrice }) {
   return (
     <ul className="cards">
-      {ps.map((p) => (
+      {plants.map((plant) => (
         <PlantCard
-          key={p.id}
-          p={p}
+          key={plant.id}
+          plant={plant}
           onDelete={onDelete}
           onUpdatePrice={onUpdatePrice}
         />

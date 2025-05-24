@@ -4,24 +4,34 @@ import PlantList from "./PlantList";
 import Search from "./Search";
 
 function PlantPage() {
-  const [pd, spd] = useState([]);
+  const [plantData, setPlantData] = useState([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:6001/plants")
       .then((r) => r.json())
-      .then((p) => spd(p));
+      .then((plants) => setPlantData(plants));
   }, []);
 
-  function addPlant(newPlant) {
-    spd([...pd, newPlant]);
+  function handleAdd(newPlantData) {
+    fetch("http://localhost:6001/plants", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPlantData),
+    })
+      .then((r) => r.json())
+      .then((createdPlant) => {
+        setPlantData([...plantData, createdPlant]);
+      });
   }
 
   function handleDelete(id) {
     fetch(`http://localhost:6001/plants/${id}`, {
       method: "DELETE",
     });
-    spd(pd.filter((plant) => plant.id !== id));
+    setPlantData(plantData.filter((plant) => plant.id !== id));
   }
 
   function handleUpdatePrice(id, newPrice) {
@@ -34,23 +44,23 @@ function PlantPage() {
     })
       .then((r) => r.json())
       .then((updatedPlant) => {
-        const updatedList = pd.map((plant) =>
+        const updatedList = plantData.map((plant) =>
           plant.id === id ? updatedPlant : plant
         );
-        spd(updatedList);
+        setPlantData(updatedList);
       });
   }
 
-  const visiblePlants = pd.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase())
+  const visiblePlants = plantData.filter((plant) =>
+    plant.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <main>
-      <NewPlantForm addPlant={addPlant} />
+      <NewPlantForm onAdd={handleAdd} />
       <Search search={search} setSearch={setSearch} />
       <PlantList
-        ps={visiblePlants}
+        plants={visiblePlants}
         onDelete={handleDelete}
         onUpdatePrice={handleUpdatePrice}
       />

@@ -8,17 +8,10 @@
       "isSoldOut": false
     },
     {
-      "id": 3,
-      "name": "Pilea peperomioides",
-      "image": "./images/pilea.jpg",
-      "price": 5.99,
-      "isSoldOut": false
-    },
-    {
-      "id": 5,
-      "name": "Jade",
-      "image": "./images/jade.jpg",
-      "price": 10.37,
+      "id": 2,
+      "name": "ZZ Plant",
+      "image": "./images/zz-plant.jpg",
+      "price": 25.98,
       "isSoldOut": false
     },
     {
@@ -34,18 +27,6 @@
       "image": "./images/fiddle-leaf-fig.jpg",
       "price": 55,
       "isSoldOut": false
-    },
-    {
-      "name": "venus ",
-      "image": "https://en.wikipedia.org/wiki/File:Venus_Flytrap_showing_trigger_hairs.jpg",
-      "price": "34",
-      "id": 8
-    },
-    {
-      "name": "venus",
-      "image": "https://en.wikipedia.org/wiki/Venus_flytrap#/media/File:Venus_Flytrap_showing_trigger_hairs.jpg",
-      "price": "34",
-      "id": 9
     }
   ]
 }
