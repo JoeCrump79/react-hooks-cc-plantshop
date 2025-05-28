@@ -3,32 +3,66 @@ import NewPlantForm from "./NewPlantForm";
 import PlantList from "./PlantList";
 import Search from "./Search";
 
-function PlantPage({ plantData, onAddPlant, onDelete, onUpdatePrice }) {
-  const [searchTerm, setSearchTerm] = useState("");
+function PlantPage() {
+  const [plantData, setPlantData] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    async function loadPlants() {
-      const res = await fetch("http://localhost:6001/plants");
-      const data = await res.json();
-      onAddPlant(data);
-    }
-    loadPlants();
-  }, [onAddPlant]);
+    fetch("http://localhost:6001/plants")
+      .then((r) => r.json())
+      .then((plants) => setPlantData(plants));
+  }, []);
 
-  const filteredPlants = plantData.filter(
-    (plant) =>
-      plant.name &&
-      plant.name.toLowerCase().includes(searchTerm.toLowerCase())
+  function handleAdd(newPlantData) {
+    fetch("http://localhost:6001/plants", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPlantData),
+    })
+      .then((r) => r.json())
+      .then((createdPlant) => {
+        setPlantData([...plantData, createdPlant]);
+      });
+  }
+
+  function handleDelete(id) {
+    fetch(`http://localhost:6001/plants/${id}`, {
+      method: "DELETE",
+    });
+    setPlantData(plantData.filter((plant) => plant.id !== id));
+  }
+
+  function handleUpdatePrice(id, newPrice) {
+    fetch(`http://localhost:6001/plants/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ price: newPrice }),
+    })
+      .then((r) => r.json())
+      .then((updatedPlant) => {
+        const updatedList = plantData.map((plant) =>
+          plant.id === id ? updatedPlant : plant
+        );
+        setPlantData(updatedList);
+      });
+  }
+
+  const visiblePlants = plantData.filter((plant) =>
+    plant.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
     <main>
-      <NewPlantForm onAddPlant={onAddPlant} />
-      <Search onSearch={setSearchTerm} />
+      <NewPlantForm onAdd={handleAdd} />
+      <Search search={search} setSearch={setSearch} />
       <PlantList
-        plants={filteredPlants}
-        onDelete={onDelete}
-        onUpdatePrice={onUpdatePrice}
+        plants={visiblePlants}
+        onDelete={handleDelete}
+        onUpdatePrice={handleUpdatePrice}
       />
     </main>
   );

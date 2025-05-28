@@ -1,18 +1,14 @@
 import React from "react";
 
-function Search({ onSearch }) {
-  function handleChange(e) {
-    onSearch(e.target.value);
-  }
-
+function Search({ search, setSearch }) {
   return (
-    <div className="searchbar">
-      <label htmlFor="search">Search Plants:</label>
+    <div>
       <input
+        value={search}
         type="text"
         id="search"
         placeholder="Type a name to search..."
-        onChange={handleChange}
+        onChange={(e) => setSearch(e.target.value)}
       />
     </div>
   );
