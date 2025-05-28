@@ -17,7 +17,7 @@ function PlantPage() {
     fetch("http://localhost:6001/plants", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "Application/JSON",
       },
       body: JSON.stringify(newPlantData),
     })
@@ -30,15 +30,19 @@ function PlantPage() {
   function handleDelete(id) {
     fetch(`http://localhost:6001/plants/${id}`, {
       method: "DELETE",
-    });
-    setPlantData(plantData.filter((plant) => plant.id !== id));
+    })
+      .then((r) => r.json())
+      .then(() => {
+         setPlantData(plantData.filter((plant) => plant.id !== id));
+      });
+   
   }
 
   function handleUpdatePrice(id, newPrice) {
     fetch(`http://localhost:6001/plants/${id}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "Application/JSON",
       },
       body: JSON.stringify({ price: newPrice }),
     })
